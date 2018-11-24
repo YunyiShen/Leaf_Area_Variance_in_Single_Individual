@@ -18,3 +18,14 @@ Orientation    4 226581239 56645310   12363 < 2.2e-16 ***
 Residuals   4995  22885986     4582                      
 ---
 Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+
+
+# analysis of edge
+
+> Edge.anova
+Analysis of Variance Table
+
+Response: Edge
+             Df Sum Sq Mean Sq F value   Pr(>F)   
+Orientation   3  3.935  1.3116  4.9144 0.002853 **
+Residuals   134 35.764  0.2669                    
