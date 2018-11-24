@@ -23,14 +23,15 @@ for i=1:n_files
 	for j = 1:numberOfBlobs	
 		blobArea = blobMeasurements(j).Area*pixalarea;		% Get area.
 		blobPerimeter = blobMeasurements(j).Perimeter*(sqrt(pixalarea));		% Get perimeter.
-		%blobCentroid = blobMeasurements(j).Centroid;		% Get centroid one at a time
+		blobCentroid = blobMeasurements(j).Centroid;		% Get centroid one at a time
 		blobECD = sqrt(4 * blobArea / pi);					% Compute ECD - Equivalent Circular Diameter.
+		blobEdge = blobPerimeter/(pi*blobECD) % Compute edge 
         if(blobArea>100000*pixalarea)
             nleaf = nleaf + 1
-            result(nleaf,:)=[blobArea,blobPerimeter,blobECD];
+            result(nleaf,:)=[blobArea,blobPerimeter,blobECD,blobEdge];
         end
     end
 end
-colomes = {'Area_mm2','Perimeter_mm','ECD_mm'};
-data = table(result(:,1),result(:,2),result(:,3),'VariableNames',colomes);
+colomes = {'Area_mm2','Perimeter_mm','ECD_mm',"Edge"};
+data = table(result(:,1),result(:,2),result(:,3),result(:,4),'VariableNames',colomes);
 writetable(data, [d,'\','areastat.csv']);

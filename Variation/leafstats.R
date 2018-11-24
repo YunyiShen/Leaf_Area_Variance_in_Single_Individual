@@ -17,46 +17,26 @@ Edge.lm = lm(Edge~Orientation,data = leafdata[leafdata$shade!='Building',])
 Edge.anova = anova(Edge.lm)
 
 
-
-data.S = data.norm[data.norm$Orientation=="S",]
-data.N = data.norm[data.norm$Orientation=="N",]
-data.E = data.norm[data.norm$Orientation=="E",]
-data.W = data.norm[data.norm$Orientation=="W",]
-
 n.bootstrap = 1000
 n.sample = 15
+
+oris = c("N","E","S","W","Building")
 bootstrap.area.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
-colnames(bootstrap.area.vars)=c("N","E","S","W","building_shade")
+colnames(bootstrap.area.vars)=oris
 
 bootstrap.edge.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
-colnames(bootstrap.edge.vars)=c("N","E","S","W","building_shade")
+colnames(bootstrap.edge.vars)=oris
+for(ori in 1:5){
+	for(i in 1:n.bootstrap){
+	data.temp = leafdata[leafdata$Orientation==oris[ori],]
+	bootstrapsample.area = data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample)]
+	bootstrap.area.vars[i,ori] = var(bootstrapsample.area)
 
-
-for(i in 1:n.bootstrap){
-  bootstrapsample.N = data.N$ECD_mm[sample.int(nrow(data.N),n.sample)]
-  bootstrap.area.vars$N[i] = var(bootstrapsample.N)
-  bootstrapsample.E = data.E$ECD_mm[sample.int(nrow(data.E),n.sample)]
-  bootstrap.area.vars$E[i] = var(bootstrapsample.E)
-  bootstrapsample.S = data.S$ECD_mm[sample.int(nrow(data.S),n.sample)]
-  bootstrap.area.vars$S[i] = var(bootstrapsample.S)
-  bootstrapsample.W = data.W$ECD_mm[sample.int(nrow(data.W),n.sample)]
-  bootstrap.area.vars$W[i] = var(bootstrapsample.W)
-  bootstrapsample.building = data.building$ECD_mm[sample.int(nrow(data.building),n.sample)]
-  bootstrap.area.vars$building_shade[i] = var(bootstrapsample.building)
-  
-  
-  bootstrapsample.edge.N = data.N$Edge[sample.int(nrow(data.N),n.sample)]
-  bootstrap.edge.vars$N[i] = var(bootstrapsample.edge.N)
-  bootstrapsample.edge.E = data.E$Edge[sample.int(nrow(data.E),n.sample)]
-  bootstrap.edge.vars$E[i] = var(bootstrapsample.edge.E)
-  bootstrapsample.edge.S = data.S$Edge[sample.int(nrow(data.S),n.sample)]
-  bootstrap.edge.vars$S[i] = var(bootstrapsample.edge.S)
-  bootstrapsample.edge.W = data.W$Edge[sample.int(nrow(data.W),n.sample)]
-  bootstrap.edge.vars$W[i] = var(bootstrapsample.edge.W)
-  bootstrapsample.edge.building = data.building$Edge[sample.int(nrow(data.building),n.sample)]
-  bootstrap.edge.vars$building_shade[i] = var(bootstrapsample.edge.building)
+	bootstrapsample.edge = data.temp$Edge[sample.int(nrow(data.temp),n.sample)]
+	bootstrap.edge.vars[i,ori] = var(bootstrapsample.edge)
   
   }
+ }
 boxplot(bootstrap.area.vars)
 boxplot(bootstrap.edge.vars)
 
