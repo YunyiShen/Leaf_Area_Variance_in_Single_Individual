@@ -27,15 +27,12 @@ colnames(bootstrap.area.vars)=oris
 bootstrap.edge.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
 colnames(bootstrap.edge.vars)=oris
 for(ori in 1:5){
-	for(i in 1:n.bootstrap){
 	data.temp = leafdata[leafdata$Orientation==oris[ori],]
-	bootstrapsample.area = data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample)]
-	bootstrap.area.vars[i,ori] = var(bootstrapsample.area)
+	bootstrapsample.area = matrix( data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample*n.bootstrap)],nrow = n.sample,ncol = n.bootstrap)
+	bootstrap.area.vars[,ori] = apply(bootstrapsample.area,2,var)
 
-	bootstrapsample.edge = data.temp$Edge[sample.int(nrow(data.temp),n.sample)]
-	bootstrap.edge.vars[i,ori] = var(bootstrapsample.edge)
-  
-  }
+	bootstrapsample.edge = matrix( data.temp$Edge[sample.int(nrow(data.temp),n.sample*n.bootstrap)],nrow = n.sample,ncol = n.bootstrap)
+	bootstrap.edge.vars[,ori] = apply(bootstrapsample.edge,2,var)
  }
 boxplot(bootstrap.area.vars)
 boxplot(bootstrap.edge.vars)
