@@ -12,7 +12,12 @@ for i=1:n_files
     originalImage = rgb2gray(originalImage);
 	bwimage = originalImage<thr;
 	bwimage = imfill(bwimage, 'holes'); % fill the holes
+    figure
+    imshow(bwimage)
 	labeled = bwlabel(bwimage, 8); % get label for each leaves
+	coloredLabels = label2rgb (labeled, 'hsv', 'k', 'shuffle');  % colored labels
+	figure
+	imshow(coloredLabels);
 	blobMeasurements = regionprops(labeled, originalImage, 'all');
 	numberOfBlobs = size(blobMeasurements, 1);
 	for j = 1:numberOfBlobs	

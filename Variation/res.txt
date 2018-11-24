@@ -1,0 +1,20 @@
+# ECD.mean
+> ECD.anova
+Analysis of Variance Table
+
+Response: ECD_mm
+             Df Sum Sq Mean Sq F value    Pr(>F)    
+Orientation   3  20219  6739.5  23.357 3.179e-12 ***
+Residuals   134  38664   288.5                      
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
+
+> anova(ECD.var.lm)
+Analysis of Variance Table
+
+Response: ECD.var
+              Df    Sum Sq  Mean Sq F value    Pr(>F)    
+Orientation    4 226581239 56645310   12363 < 2.2e-16 ***
+Residuals   4995  22885986     4582                      
+---
+Signif. codes:  0 ¡®***¡¯ 0.001 ¡®**¡¯ 0.01 ¡®*¡¯ 0.05 ¡®.¡¯ 0.1 ¡® ¡¯ 1
