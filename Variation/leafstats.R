@@ -19,7 +19,7 @@ Edge.anova = anova(Edge.lm)
 
 n.bootstrap = 1000
 n.sample = 15
-
+set.seed(12345)
 oris = c("N","E","S","W","Building")
 bootstrap.area.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
 colnames(bootstrap.area.vars)=oris
@@ -28,10 +28,10 @@ bootstrap.edge.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
 colnames(bootstrap.edge.vars)=oris
 for(ori in 1:5){
 	data.temp = leafdata[leafdata$Orientation==oris[ori],]
-	bootstrapsample.area = matrix( data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample*n.bootstrap)],nrow = n.sample,ncol = n.bootstrap)
+	bootstrapsample.area = matrix( data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample*n.bootstrap,replace=T)],nrow = n.sample,ncol = n.bootstrap)
 	bootstrap.area.vars[,ori] = apply(bootstrapsample.area,2,var)
 
-	bootstrapsample.edge = matrix( data.temp$Edge[sample.int(nrow(data.temp),n.sample*n.bootstrap)],nrow = n.sample,ncol = n.bootstrap)
+	bootstrapsample.edge = matrix( data.temp$Edge[sample.int(nrow(data.temp),n.sample*n.bootstrap,replace=T)],nrow = n.sample,ncol = n.bootstrap)
 	bootstrap.edge.vars[,ori] = apply(bootstrapsample.edge,2,var)
  }
 boxplot(bootstrap.area.vars)
@@ -41,10 +41,10 @@ boot.data.reshape = data.frame(ECD.var = matrix( as.matrix(bootstrap.area.vars),
                                ,Edge.var = matrix( as.matrix(bootstrap.edge.vars),nrow = 5*n.bootstrap,ncol = 1)
                                ,Orientation = rep(colnames(bootstrap.area.vars),each = n.bootstrap))
 
-ECD.var.lm = lm(ECD.var~Orientation,data = boot.data.reshape)
+ECD.var.lm = lm(log(ECD.var)~Orientation,data = boot.data.reshape)
 anova(ECD.var.lm)
 
-Edge.var.lm = lm(Edge.var~Orientation,data = boot.data.reshape)
+Edge.var.lm = lm(log(Edge.var)~Orientation,data = boot.data.reshape)
 anova(Edge.var.lm)
 
 
