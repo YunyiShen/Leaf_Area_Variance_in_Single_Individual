@@ -10,12 +10,15 @@ leafdata = rbind(data.norm,data.building) # sepcial treatment to building shade 
 boxplot(ECD_mm~Orientation,data = leafdata)
 boxplot(Edge~Orientation,data = leafdata)
 
-ECD.lm = lm(ECD_mm~Orientation,data = leafdata[leafdata$shade!='Building',])
+ECD.lm = lm(ECD_mm~Orientation,data = leafdata)
 ECD.anova = anova(ECD.lm)
 
-Edge.lm = lm(Edge~Orientation,data = leafdata[leafdata$shade!='Building',])
+Edge.lm = lm(Edge~Orientation,data = leafdata)
 Edge.anova = anova(Edge.lm)
 
+require(lmtest)
+bptest(ECD.lm)
+bptest(Edge.lm)
 
 n.bootstrap = 1000
 n.sample = 15
