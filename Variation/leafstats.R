@@ -26,13 +26,16 @@ set.seed(12345)
 oris = c("N","E","S","W","Building")
 bootstrap.area.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
 colnames(bootstrap.area.vars)=oris
+bootstrap.area.mean = bootstrap.area.vars
 
 bootstrap.edge.vars = data.frame(matrix(0,nrow = n.bootstrap,ncol = 5))
 colnames(bootstrap.edge.vars)=oris
+
 for(ori in 1:5){
 	data.temp = leafdata[leafdata$Orientation==oris[ori],]
 	bootstrapsample.area = matrix( data.temp$ECD_mm[sample.int(nrow(data.temp),n.sample*n.bootstrap,replace=T)],nrow = n.sample,ncol = n.bootstrap)
 	bootstrap.area.vars[,ori] = apply(bootstrapsample.area,2,var)
+	bootstrap.area.mean[,ori] = apply(bootstrapsample.area,2,mean)
 
 	bootstrapsample.edge = matrix( data.temp$Edge[sample.int(nrow(data.temp),n.sample*n.bootstrap,replace=T)],nrow = n.sample,ncol = n.bootstrap)
 	bootstrap.edge.vars[,ori] = apply(bootstrapsample.edge,2,var)
